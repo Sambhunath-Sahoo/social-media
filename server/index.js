@@ -9,7 +9,11 @@ import morgan from "morgan";
 import path from "path";
 import { fileURLToPath } from "url";
 
+
+import authRoutes from "./routes/auth.js";
+
 import { register } from "./controllers/auth.js";
+
 
 
 
@@ -31,6 +35,9 @@ app.use(bodyParser.urlencoded({ limit: "30mb", extended: true })); // Parse URL-
 app.use(cors()); // Enable Cross-Origin Resource Sharing (CORS)
 app.use("/assets", express.static(path.join(__dirname, "public/assets"))); // Serve static assets from the "public/assets" directory
 
+
+
+
 /* FILE STORAGE */
 
 // Configure the storage options for multer
@@ -49,8 +56,19 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 
+
+
 /* ROUTES WITH FILES */
 app.post("/auth/register", upload.single("picture"), register);
+
+
+
+
+/* ROUTES */
+app.use("/auth", authRoutes);
+
+
+
 
 /* MONGOOSE SETUP */
 const PORT = process.env.PORT || 6001;
