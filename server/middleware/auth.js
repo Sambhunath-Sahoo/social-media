@@ -8,30 +8,30 @@ import jwt from "jsonwebtoken";
  * @param {Function} next - The next function to continue to the next middleware or route handler
  */
 export const verifyToken = async (req, res, next) => {
-  try {
-    // Extract the token from the Authorization header
-    let token = req.header("Authorization");
+	try {
+		// Extract the token from the Authorization header
+		let token = req.header("Authorization");
 
-    // Check if the token exists
-    if (!token) {
-      return res.status(403).send("Access Denied");
-    }
+		// Check if the token exists
+		if (!token) {
+			return res.status(403).send("Access Denied");
+		}
 
-    // Remove the "Bearer " prefix from the token if present
-    if (token.startsWith("Bearer ")) {
-      token = token.slice(7, token.length).trimLeft();
-    }
+		// Remove the "Bearer " prefix from the token if present
+		if (token.startsWith("Bearer ")) {
+			token = token.slice(7, token.length).trimLeft();
+		}
 
-    // Verify the token using the JWT_SECRET
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
+		// Verify the token using the JWT_SECRET
+		const verified = jwt.verify(token, process.env.JWT_SECRET);
 
-    // Set the verified user information in the request object
-    req.user = verified;
+		// Set the verified user information in the request object
+		req.user = verified;
 
-    // Proceed to the next middleware or route handler
-    next();
-  } catch (err) {
-    // If an error occurs, respond with an error message
-    res.status(500).json({ error: err.message });
-  }
+		// Proceed to the next middleware or route handler
+		next();
+	} catch (err) {
+		// If an error occurs, respond with an error message
+		res.status(500).json({ error: err.message });
+	}
 };
